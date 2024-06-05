@@ -1,33 +1,26 @@
 import { useState, useEffect } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import Start from './components/Start'
+import Quiz from './components/Quiz'
 
 function App() {
-  const [data, setData] = useState(null)
+  const [start, setStart] = useState(false)
+  const [dataQ, setDataQ] = useState(null)
 
   useEffect(() => {
-
-    fetch('https://opentdb.com/api.php?amount=5&category=11&difficulty=medium')
+    fetch('https://opentdb.com/api.php?amount=5')
       .then(res => res.json())
       .then(data => {
-        console.log(data.results)
+        // console.log(data.results)
+        setDataQ(data.results)
+      })
+      .catch(err => {
+        console.log(err)
       })
   }, [])
 
-  const dq = [
-    {
-      type: 'bollean',
-      quest: 'blabla?',
-      variants: [
-        { ans: 'otvet 1', correct: false },
-        { ans: 'otvet 2', correct: false },
-        { ans: 'blabla', correct: true },
-        { ans: 'otvet 4', correct: false }
-      ]
-    },
-  ]
-
   return (
     <>
+      {start ? <Quiz dataQ={dataQ} /> : <Start setStart={setStart} />}
     </>
   )
 }
