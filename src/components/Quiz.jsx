@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import Form from './Form'
 
 export default function Quiz({ dataQ }) {
-    console.log(dataQ)
+    // console.log(dataQ)
 
     const allQuestAns = dataQ?.map(elem => {
         let answerArr = elem.incorrect_answers.map(incorrectElem => {
