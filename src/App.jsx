@@ -4,22 +4,10 @@ import Quiz from './components/Quiz'
 
 function App() {
   const [start, setStart] = useState(false)
-  const [dataQ, setDataQ] = useState(null)
-
-  useEffect(() => {
-    fetch('https://opentdb.com/api.php?amount=5')
-      .then(res => res.json())
-      .then(data => {
-        setDataQ(data.results)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }, [])
-
+  
   return (
     <>
-      {start ? <Quiz dataQ={dataQ} /> : <Start setStart={setStart} />}
+      {start ? <Quiz /> : <Start setStart={setStart} />}
     </>
   )
 }
