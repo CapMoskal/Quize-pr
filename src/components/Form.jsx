@@ -1,18 +1,12 @@
 import { useState, useMemo } from 'react'
 import he from 'he'
 
-export default function Form({ allQuestAns, correctAns }) {
-    console.log(correctAns)
-
-    // чтобы видеть, что приходит с Quiz
-    // console.log(allQuestAns)
-
-    // при выборе ответа пользователем сохранять его 
-    // ответы в formData, чтобы потом сравнить с массивом правильных
+export default function Form({ allQuestAns, correctAns, setRestart }) {
+    console.log(allQuestAns)
 
     const [endScore, setEndScore] = useState(0)
     const [finished, setFinished] = useState(false)
-    const [formData, setFormData] = useState(
+    const [usersAnswers, setUsersAnswers] = useState(
         {
             question0: '',
             question1: '',
@@ -21,9 +15,18 @@ export default function Form({ allQuestAns, correctAns }) {
             question4: ''
         }
     )
-    // console.log(formData)
 
-    const isFinished = () => {
+    function restartGame() {
+        setEndScore(0)
+        setFinished(false)
+        setUsersAnswers({
+            question0: '',
+            question1: '',
+            question2: '',
+            question3: '',
+            question4: ''
+        })
+        setRestart(prev => !prev)
     }
 
     function shuffleArray(array) {
@@ -37,7 +40,7 @@ export default function Form({ allQuestAns, correctAns }) {
 
     function handleChange(e) {
         const { name, value } = e.target
-        setFormData(prev => {
+        setUsersAnswers(prev => {
             return {
                 ...prev,
                 [name]: value
@@ -45,14 +48,36 @@ export default function Form({ allQuestAns, correctAns }) {
         })
     }
 
+    function checkFinished() {
+        for (let elem in usersAnswers) {
+            if (usersAnswers[elem] === '') return 1
+        }
+        return 0
+    }
+
+    function finishQuiz(e) {
+        e.preventDefault()
+        let score = 0
+        let indexCorrectAns = 0
+        for (let elem in usersAnswers) {
+            usersAnswers[elem] === correctAns[indexCorrectAns] && score++
+            indexCorrectAns++
+        }
+        setFinished(prev => !prev)
+        setEndScore(score)
+    }
+
     function getInputs(ansArr, indexQ) {
         let shuffledArr = shuffleArray(ansArr)
-        // зашафлить и раскидать вопросы по инпутам
-        // добавить необходимые свойства к каждому инпуту
         const inputsQ = shuffledArr?.map((elem, index) => {
             return (
-                <label key={`${indexQ}-${index}`} htmlFor={`${indexQ}-${index}`}>
+                <label
+                    className='label-q'
+                    key={`${indexQ}-${index}`}
+                    htmlFor={`${indexQ}-${index}`}
+                >
                     <input
+                        className='input-q'
                         type="radio"
                         id={`${indexQ}-${index}`}
                         name={`question${indexQ}`}
@@ -66,49 +91,31 @@ export default function Form({ allQuestAns, correctAns }) {
         return inputsQ
     }
 
-    // функция заканчивает квиз, считает очки и рендерит результат
-    function finishQuiz(e) {
-        e.preventDefault()
-        let score = 0
-        let indexCorrectAns = 0
-        for (let elem in formData) {
-            formData[elem] === correctAns[indexCorrectAns] && score++
-            indexCorrectAns++
-        }
-        console.log('---------------')
-        console.log('score = ' + score)
-        console.log('---------------')
-        setFinished(prev => !prev)
-        setEndScore(score)
-    }
-
     const questArr = useMemo(() => {
         return allQuestAns?.map((elem, index) => {
             const inputs = getInputs(elem.answers, index)
             return (
                 <div key={index} className='quest'>
                     <h2>{he.decode(elem.question)}</h2>
-                    {inputs}
+                    <div className='inputs'>
+                        {inputs}
+                    </div>
                 </div>
             )
         })
     }, [allQuestAns])
 
-    // console.log(formData)
+    const isAllAns = checkFinished()
     return (
         <div className='form'>
             <form>
                 {questArr}
-                {!finished && <button onClick={finishQuiz}>Chek results</button>}
+                {!finished && <button disabled={isAllAns} onClick={finishQuiz}>Chek results</button>}
             </form>
-            <div className='restart'>
-                {finished && <h2>{endScore}</h2>}
-                {finished && <button>restart game</button>}
-            </div>
+            {finished && <div className='restart'>
+                <h2>{`you scored ${endScore}/5 correct answers`}</h2>
+                <button onClick={restartGame}>restart game</button>
+            </div>}
         </div>
     )
 }
-
-// 1) финиш нельзя нажимать пока на все не ответить!!!!
-// 2) рестарт должен работать
-// 3) сделать красивый подсчет и настроить стили хз че нибудь еще додумаю 

@@ -4,7 +4,10 @@ import Form from './Form'
 export default function Quiz() {
     const [dataQ, setDataQ] = useState(null)
 
+    const [restart, setRestart] = useState(false)
+
     useEffect(() => {
+        console.log('useEffect runned')
         fetch('https://opentdb.com/api.php?amount=5')
             .then(res => res.json())
             .then(data => {
@@ -13,9 +16,7 @@ export default function Quiz() {
         // .catch(err => {  разобраться как сделать вывод ошибки апи
         //     console.log(err)
         // })
-    }, [])
-    // чтобы видеть, что берем с апишки
-    // console.log(dataQ)
+    }, [restart])
 
 
     const correctAnswers = dataQ?.map(elem => {
@@ -36,16 +37,20 @@ export default function Quiz() {
     // если апишка не работает
     if (!dataQ) {
         return (
-            <>
-                <h2>sorry api doesn't work for now</h2>
-                <h2>try to refresh</h2>
-            </>
+            <div className='loading'>
+                <h2>Loading...</h2>
+                <h2>if doesn't load - try to refresh</h2>
+            </div>
         )
     }
 
     return (
         <div className='quiz'>
-            <Form allQuestAns={allQuestAns} correctAns={correctAnswers} />
+            <Form
+                allQuestAns={allQuestAns}
+                correctAns={correctAnswers}
+                setRestart={setRestart}
+            />
         </div>
     )
 }
