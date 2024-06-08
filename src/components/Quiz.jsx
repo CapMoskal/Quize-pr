@@ -1,38 +1,43 @@
 import { useState, useEffect } from 'react'
-import Form from './Form'
+import Question from './Question'
 
 export default function Quiz() {
+    const [correctAnswers, setCorrectAnswers] = useState([])
+    const [allQuestions, setAllQuestions] = useState(null)
     const [dataQ, setDataQ] = useState(null)
-
     const [restart, setRestart] = useState(false)
 
     useEffect(() => {
         console.log('useEffect runned')
-        fetch('https://opentdb.com/api.php?amount=5')
+        fetch('https://opentdb.com/api.php?amount=5&category=15&difficulty=medium')
             .then(res => res.json())
             .then(data => {
                 setDataQ(data.results)
+
+                setCorrectAnswers(data.results?.map(elem => elem.correct_answer))
+
+                setAllQuestions(data.results?.map(elem => {
+                    let answerArr = elem.incorrect_answers.map(incorrectElem => incorrectElem)
+                    answerArr.push(elem.correct_answer)
+                    return {
+                        question: elem.question,
+                        answers: shuffleArray(answerArr)
+                    }
+                }))
             })
-        // .catch(err => {  разобраться как сделать вывод ошибки апи
-        //     console.log(err)
-        // })
+            .catch(err => {
+                console.log(err)
+            })
     }, [restart])
 
-
-    const correctAnswers = dataQ?.map(elem => {
-        return elem.correct_answer
-    })
-
-    const allQuestAns = dataQ?.map(elem => {
-        let answerArr = elem.incorrect_answers.map(incorrectElem => {
-            return incorrectElem
-        })
-        answerArr.push(elem.correct_answer)
-        return {
-            question: elem.question,
-            answers: answerArr
+    function shuffleArray(array) {
+        let shuffledArray = array.slice(); // Создаем копию массива, чтобы не изменять исходный
+        for (let i = shuffledArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
         }
-    })
+        return shuffledArray;
+    }
 
     // если апишка не работает
     if (!dataQ) {
@@ -46,8 +51,8 @@ export default function Quiz() {
 
     return (
         <div className='quiz'>
-            <Form
-                allQuestAns={allQuestAns}
+            <Question
+                allQuestions={allQuestions}
                 correctAns={correctAnswers}
                 setRestart={setRestart}
             />

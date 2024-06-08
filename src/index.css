@@ -47,87 +47,84 @@ html {
   cursor: pointer;
 }
 
-.form {
+
+.container {
+  color: #293264;
   margin: 0;
   padding: 0 60px;
 }
 
-.quest {
+.quest-container {
   border-bottom: 1px solid #DBDEF0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding-bottom: 15px;
 }
 
-.quest h2,
-.label-q {
-  color: #293264;
+.quest-container h2 {
+  max-width: 750px;
 }
 
-.quest h2 {
-  max-width: 700px;
-}
-
-.inputs {
+.ans-container {
   display: flex;
   gap: 12px;
 }
 
-/* .input-q {
-  margin: 0;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-  -o-appearance: none;
-  appearance: none;
-} */
-
-.label-q {
+.ans {
+  font-size: 17px;
+  padding: 4px 15px;
   font-weight: 500;
   border: 1px solid #4D5B9E;
-  border-radius: 8px;
-  padding: 5px 15px;
-  text-align: center;
+  border-radius: 10px;
+  margin: 0 0 20px 0;
 }
 
-.label-q:hover,
-.label-q:active {
+.ans:hover,
+.ans:active {
   cursor: pointer;
   background-color: #D6DBF5;
 }
 
-form button,
-.restart button {
+.selected {
+  background-color: #D6DBF5;
+}
+
+.end {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.btn {
   background-color: #4D5B9E;
-  color: #F5F7FB;
-  border-radius: 15px;
-  font-size: 18px;
+  color:#F5F7FB;
   padding: 11px 21px;
   border: none;
+  border-radius: 10px;
+  font-size: 16px;
 }
 
-form button {
-  margin-left: 377.32px;
-  margin-top: 30px;
-}
-
-.restart button:hover,
-.restart button:active,
-form button:hover,
-form button:active {
+.end button:hover,
+.end button:active {
   cursor: pointer;
+  background-color: #2b3ea0;
 }
 
-form button:disabled {
+.end button:disabled {
   background-color: gray;
 }
 
+.right {
+  background-color: #94D7A2;
+}
+.wrong {
+  background-color: #F8BCBC;
+}
+
 .restart {
-  color: #293264;
   display: flex;
-  flex-direction: column;
+  gap: 20px;
   justify-content: center;
   align-items: center;
 }
