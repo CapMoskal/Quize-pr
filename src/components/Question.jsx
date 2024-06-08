@@ -11,13 +11,9 @@ const userObj = {
 }
 
 export default function Question({ allQuestions, correctAns, setRestart }) {
-    // console.log(allQuestions)
-    console.log(correctAns)
-
     const [endScore, setEndScore] = useState(0)
     const [isFinished, setIsFinished] = useState(false)
     const [usersAnswers, setUsersAnswers] = useState(userObj)
-    console.log(usersAnswers)
 
     function restartGame() {
         setEndScore(0)
@@ -33,9 +29,7 @@ export default function Question({ allQuestions, correctAns, setRestart }) {
         return 0
     }
 
-    // переделать
     function finishQuiz() {
-        console.log('quiz end')
         let score = 0
         let indexCorrectAns = 0
         for (let elem in usersAnswers) {
@@ -117,18 +111,3 @@ export default function Question({ allQuestions, correctAns, setRestart }) {
         </>
     )
 }
-
-// рассматриваем ответ, который рендерится:
-// если вопрос в списке userAnswers
-    // делаем красным
-// если вопрос в списке correctAnswers
-    // делаем зеленым
-
-
-    // {finished && 
-    // }
-
-
-// 1) сделать рендер вопросов в отдельном компоненте
-// 2) отказаться от формы
-// 3) userAnswers сделать пустым массивом

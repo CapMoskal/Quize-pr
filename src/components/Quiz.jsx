@@ -8,7 +8,6 @@ export default function Quiz() {
     const [restart, setRestart] = useState(false)
 
     useEffect(() => {
-        console.log('useEffect runned')
         fetch('https://opentdb.com/api.php?amount=5&category=15&difficulty=medium')
             .then(res => res.json())
             .then(data => {
